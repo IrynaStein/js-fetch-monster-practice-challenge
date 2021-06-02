@@ -4,41 +4,36 @@ const monsterContainer = document.getElementById('monster-container');
 const forwardButton = document.getElementById('forward');
 const backButton = document.getElementById('back');
 
+let currentPage = 1;
 //variable for API
-const monstersAPI = 'http://localhost:3000/monsters/?_limit=50&_page=1';
-
-
+// parameters need to be defined in the body of GET fetch request
 //fetch request
 function getMonsters() {
-    return fetch(monstersAPI)
+    monsterContainer.innerHTML = ''
+    return fetch(`http://localhost:3000/monsters/?_limit=50&_page=${currentPage}`)
     .then(res => res.json())
-    .then(data => displayData(data))
+    .then(data => data.map(element => displayData(element)))
     .catch(error => console.log(error))
-}
+    }
 
 //function to display data
 function displayData(data) {
         //create div for each monster element w id = id#
-        if (typeof data === 'object') {
-            console.log('we got an object')
-        } else {
-            return data.map(element => {
             const newDiv = document.createElement('div');
             //create H2 for name & set innerText
             const name = document.createElement('h2');
-            name.innerText = element.name;
+            name.innerText = data.name;
             //create H4 for age & set innerText
             const age = document.createElement('h4');
-            age.innerText = element.age;
+            age.innerText = data.age;
             //create p for description
             const desc = document.createElement('p');
-            desc.innerText = element.description;
+            desc.innerText = data.description;
             //append to div
             newDiv.append(name, age, desc);
             monsterContainer.append(newDiv);
-        })
-            
-        }}
+        }
+
 getMonsters();
 
 //assign form HTML tags to variables

@@ -8,7 +8,7 @@ let currentPage = 1;
 //variable for API
 // parameters need to be defined in the body of GET fetch request
 //fetch request
-function getMonsters() {
+function getMonsters(currentPage) {
     monsterContainer.innerHTML = ''
     return fetch(`http://localhost:3000/monsters/?_limit=50&_page=${currentPage}`)
     .then(res => res.json())
@@ -62,8 +62,25 @@ function createMonster(e) {
     }
     console.log(configObject);
     //send POST request
-    fetch(monstersAPI, configObject)
+    fetch(`http://localhost:3000/monsters/?_limit=50&_page=${currentPage}`, configObject)
     .then(res => res.json())
     .then(data => displayData(data))
     .catch(error => console.log(error))
+}
+const forwardclick = () => getMonsters(currentPage++)
+
+forwardButton.addEventListener('click', forwardclick)
+backButton.addEventListener ('click', backward)
+
+// function forward (){
+// currentPage++
+// return getMonsters(currentPage)
+// }
+
+
+function backward(){
+if (currentPage > 1){
+    currentPage--
+    return getMonsters(currentPage)
+}
 }
